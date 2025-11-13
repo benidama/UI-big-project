@@ -15,7 +15,7 @@ const AddJobPage = ({ addJobSubmit }) => {
 
   const navigate = useNavigate();
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
 
     const newJob = {
@@ -32,11 +32,13 @@ const AddJobPage = ({ addJobSubmit }) => {
       },
     };
 
-    addJobSubmit(newJob);
-
-    toast.success("Job Added Successfully");
-
-    return navigate("/jobs");
+    try {
+      await addJobSubmit(newJob);
+      toast.success("Job Added Successfully");
+      navigate("/jobs");
+    } catch (error) {
+      toast.error("Failed to add job. Please try again.");
+    }
   };
 
   return (
@@ -77,7 +79,7 @@ const AddJobPage = ({ addJobSubmit }) => {
                 id="title"
                 name="title"
                 className="border rounded w-full py-2 px-3 mb-2"
-                placeholder="eg. Beautiful Apartment In Miami"
+                placeholder="eg. Senior Software Developer"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -103,7 +105,7 @@ const AddJobPage = ({ addJobSubmit }) => {
 
             <div className="mb-4">
               <label
-                htmlFor="type"
+                htmlFor="salary"
                 className="block text-gray-700 font-bold mb-2"
               >
                 Salary
